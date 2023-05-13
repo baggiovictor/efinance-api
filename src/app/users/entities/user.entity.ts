@@ -14,7 +14,7 @@ export class UsersEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'fist_name' })
+  @Column({ name: 'first_name' })
   firstName: string;
 
   @Column({ name: 'last_name' })
