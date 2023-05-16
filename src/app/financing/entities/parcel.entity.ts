@@ -14,7 +14,7 @@ export class ParcelEntity {
   @PrimaryGeneratedColumn('uuid')
   id: number;
 
-  @ManyToOne(() => FinancingEntity, (financing) => financing.amountOfTimes)
+  @ManyToOne(() => FinancingEntity, (financing) => financing.id)
   @JoinColumn({ name: 'financing_id' })
   financing: FinancingEntity;
 

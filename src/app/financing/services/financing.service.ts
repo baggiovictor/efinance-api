@@ -1,8 +1,6 @@
-// financing.service.ts
-
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { FinancingEntity } from '../entities/finance.entity';
 import { ParcelService } from './installments.service';
 import { CreateFinancingDto } from '../dtos/create-financing.dto';
@@ -12,6 +10,7 @@ export class FinancingService {
   constructor(
     @InjectRepository(FinancingEntity)
     private financingRepository: Repository<FinancingEntity>,
+
     private parcelService: ParcelService,
   ) {}
 
@@ -20,9 +19,29 @@ export class FinancingService {
   ): Promise<Partial<FinancingEntity>> {
     const createdFinancing = await this.financingRepository.save(financing);
 
-    // Chamar o serviço ParcelService para calcular e salvar as parcelas
     await this.parcelService.createParcels(createdFinancing);
 
     return createdFinancing;
+  }
+
+  async findAll() {
+    return await this.financingRepository.find({
+      select: [
+        'id',
+        'amountFinanced',
+        'amountOfTimes',
+        'tax',
+        'typeFinanced',
+        'userId',
+      ],
+    });
+  }
+
+  async findOneOrFail(options: FindOneOptions<FinancingEntity>) {
+    try {
+      return await this.financingRepository.findOneOrFail(options);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 }

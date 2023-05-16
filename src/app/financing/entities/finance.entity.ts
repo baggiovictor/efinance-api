@@ -1,8 +1,11 @@
+import { UsersEntity } from 'src/app/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -23,6 +26,9 @@ export class FinancingEntity {
 
   @Column({ name: 'type_financed' })
   typeFinanced: string;
+
+  @Column({ name: 'user_id' })
+  userId: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: string;

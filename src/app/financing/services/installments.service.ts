@@ -1,6 +1,6 @@
 // parcel.service.ts
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ParcelEntity } from '../entities/parcel.entity';
@@ -56,6 +56,20 @@ export class ParcelService {
 
     // Save the parcels in the database
     await this.parcelRepository.save(parcels);
+
+    return parcels;
+  }
+
+  async findAllByFinancingId(id: any): Promise<ParcelEntity[]> {
+    const parcels = await this.parcelRepository.find({
+      where: { financing: { id } },
+    });
+
+    if (!parcels || parcels.length === 0) {
+      throw new NotFoundException(
+        'No parcels found for the specified financing',
+      );
+    }
 
     return parcels;
   }

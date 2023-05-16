@@ -18,4 +18,8 @@ export class CreateFinancingDto {
   @IsString()
   @IsIn(['SAC', 'PRICE'])
   typeFinanced: string;
+
+  @ApiProperty()
+  @IsString()
+  userId: string;
 }
