@@ -1,5 +1,3 @@
-// financing.controller.ts
-
 import {
   Controller,
   Post,
@@ -12,7 +10,6 @@ import { FinancingService } from '../services/financing.service';
 import { CreateFinancingDto } from '../dtos/create-financing.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { ParcelService } from '../services/installments.service';
-import { ParcelEntity } from '../entities/parcel.entity';
 
 @ApiTags('Financing')
 @Controller('financing')

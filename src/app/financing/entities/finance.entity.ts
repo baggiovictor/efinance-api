@@ -1,4 +1,3 @@
-import { UsersEntity } from 'src/app/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
