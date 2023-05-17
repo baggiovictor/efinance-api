@@ -4,8 +4,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -14,6 +13,7 @@ import { hashSync } from 'bcrypt';
 @Entity({ name: 'users' })
 export class UsersEntity {
   @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: string;
 
   @Column({ name: 'first_name' })

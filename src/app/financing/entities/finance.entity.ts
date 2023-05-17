@@ -4,8 +4,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -13,6 +12,7 @@ import {
 @Entity({ name: 'financing' })
 export class FinancingEntity {
   @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: string;
 
   @Column({ name: 'amount_financed' })

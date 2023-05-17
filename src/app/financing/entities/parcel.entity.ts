@@ -1,9 +1,8 @@
-// parcel.entity.ts
-
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  PrimaryColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
@@ -12,6 +11,7 @@ import { FinancingEntity } from './finance.entity';
 @Entity()
 export class ParcelEntity {
   @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: number;
 
   @ManyToOne(() => FinancingEntity, (financing) => financing.id)
