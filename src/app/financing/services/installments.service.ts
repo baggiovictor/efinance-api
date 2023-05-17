@@ -1,5 +1,3 @@
-// parcel.service.ts
-
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -41,7 +39,7 @@ export class ParcelService {
       }
 
       const parcel = new ParcelEntity();
-      parcel.financing = financing; // Assign the corresponding financing to the parcel
+      parcel.financing = financing;
       parcel.parcelNumber = i;
       parcel.type = i % 2 === 0 ? 2 : 1;
       parcel.amortization = amortization;
@@ -54,7 +52,6 @@ export class ParcelService {
       outstandingBalance -= amortization;
     }
 
-    // Save the parcels in the database
     await this.parcelRepository.save(parcels);
 
     return parcels;
