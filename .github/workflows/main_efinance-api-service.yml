@@ -1,20 +1,16 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy Node.js app to Azure Web App - efinance-api-service
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2.4.1
+      - uses: actions/checkout@v2
 
       - name: Set up Node.js version
         uses: actions/setup-node@v2
@@ -25,7 +21,7 @@ jobs:
         run: |
           npm install
           npm run build --if-present
-
+          
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
