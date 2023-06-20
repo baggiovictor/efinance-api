@@ -1,18 +1,18 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
   PrimaryColumn,
   ManyToOne,
   JoinColumn,
+  Generated,
 } from 'typeorm';
 import { FinancingEntity } from './finance.entity';
 
-@Entity()
+@Entity({ name: 'parcels', synchronize: true })
 export class ParcelEntity {
-  @PrimaryGeneratedColumn('uuid')
-  @PrimaryColumn()
-  id: number;
+  @PrimaryColumn({ type: 'uuid', nullable: false })
+  @Generated('uuid')
+  id: string;
 
   @ManyToOne(() => FinancingEntity, (financing) => financing.id)
   @JoinColumn({ name: 'financing_id' })

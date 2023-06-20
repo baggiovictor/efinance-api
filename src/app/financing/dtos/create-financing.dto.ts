@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString, IsIn } from 'class-validator';
+import { IsNumber, IsString, IsIn, IsOptional } from 'class-validator';
 
 export class CreateFinancingDto {
   @ApiProperty()
@@ -21,5 +21,6 @@ export class CreateFinancingDto {
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
   userId: string;
 }

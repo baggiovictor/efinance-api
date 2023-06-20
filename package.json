@@ -38,7 +38,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "swagger-ui-express": "^4.6.3",
-    "typeorm": "^0.3.16",
+    "typeorm": "0.2.34",
     "webpack": "^5.85.1"
   },
   "devDependencies": {

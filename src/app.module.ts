@@ -17,6 +17,7 @@ import { FinancingModule } from './app/financing/financing.module';
       database: process.env.TYPEORM_DATABASE,
       entities: [__dirname + '/**/*.entity{.js,.ts}'],
       synchronize: true,
+      autoLoadEntities: true,
     } as TypeOrmModuleOptions),
     UsersModule,
     AuthModule,
