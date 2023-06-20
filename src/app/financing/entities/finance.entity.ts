@@ -26,7 +26,7 @@ export class FinancingEntity {
   @Column({ name: 'type_financed' })
   typeFinanced: string;
 
-  @Column({ name: 'user_id' })
+  @Column({ name: 'user_id', nullable: true })
   userId: string;
 
   @CreateDateColumn({ name: 'created_at' })
