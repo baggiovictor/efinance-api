@@ -4,9 +4,7 @@ import { IsNotEmpty } from 'class-validator';
 export class UpdateUserDto {
   @ApiProperty()
   @IsNotEmpty()
-  firstName: string;
+  name: string;
 
-  @ApiProperty()
-  @IsNotEmpty()
-  lastName: string;
+
 }

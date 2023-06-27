@@ -41,4 +41,10 @@ export class FinancingController {
   async getParcelsByFinancingId(@Param('id') id: string) {
     return await this.parcelService.findAllByFinancingId(id);
   }
+
+  @Get('/:userId/historico')
+  async getByUserId(@Param('userId') userId: string) {
+    return this.financingService.findByUserId(userId);
+  }
+
 }

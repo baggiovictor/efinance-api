@@ -37,6 +37,20 @@ export class FinancingService {
     });
   }
 
+  async findByUserId(userId: string): Promise<Partial<FinancingEntity>[]> {
+    return await this.financingRepository.find({
+      select: [
+        'id',
+        'amountFinanced',
+        'amountOfTimes',
+        'tax',
+        'typeFinanced',
+        'userId',
+      ],
+      where: { userId },
+    });
+  }
+
   async findOneOrFail(options: FindOneOptions<FinancingEntity>) {
     try {
       return await this.financingRepository.findOneOrFail(options);
