@@ -60,6 +60,9 @@ export class ParcelService {
   async findAllByFinancingId(id: any): Promise<ParcelEntity[]> {
     const parcels = await this.parcelRepository.find({
       where: { financing: { id } },
+      order: {
+        parcelNumber: 'ASC',
+      },
     });
 
     if (!parcels || parcels.length === 0) {
