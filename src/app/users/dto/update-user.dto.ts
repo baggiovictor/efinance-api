@@ -5,6 +5,4 @@ export class UpdateUserDto {
   @ApiProperty()
   @IsNotEmpty()
   name: string;
-
-
 }
