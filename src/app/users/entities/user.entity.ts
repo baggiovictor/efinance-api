@@ -16,7 +16,7 @@ export class UsersEntity {
   @PrimaryColumn()
   id: string;
 
-  @Column({ name: 'first_name' })
+  @Column({ name: 'name' })
   name: string;
 
   @Column()

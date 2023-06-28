@@ -20,34 +20,35 @@ export class ParcelService {
     const financingType = financing.typeFinanced;
 
     let outstandingBalance = financedAmount;
-    let amortization;
-    let interest;
-    let installment;
 
     for (let i = 1; i <= numberOfTimes; i++) {
+      let amortization: number;
+      let interest: number;
+      let installment: number;
+
       if (financingType === 'SAC') {
-        amortization = financedAmount / numberOfTimes;
-        interest = outstandingBalance * annualRate;
+        amortization = outstandingBalance / numberOfTimes;
+        interest = outstandingBalance * (annualRate / 12);
         installment = amortization + interest;
       } else if (financingType === 'PRICE') {
-        const coefficient =
-          (annualRate * Math.pow(1 + annualRate, numberOfTimes)) /
-          (Math.pow(1 + annualRate, numberOfTimes) - 1);
-        installment = financedAmount * coefficient;
-        interest = outstandingBalance * annualRate;
+        interest = (outstandingBalance * annualRate) / 12;
+        installment =
+          (financedAmount * (annualRate / 12)) /
+          (1 - Math.pow(1 + annualRate / 12, -numberOfTimes));
         amortization = installment - interest;
       }
 
-      const parcel = new ParcelEntity();
-      parcel.financing = financing;
-      parcel.parcelNumber = i;
-      parcel.type = i % 2 === 0 ? 2 : 1;
-      parcel.amortization = amortization;
-      parcel.interest = interest;
-      parcel.installment = installment;
-      parcel.outstandingBalance = outstandingBalance;
+      const parcel: Partial<ParcelEntity> = {
+        financing,
+        parcelNumber: i,
+        type: i % 2 === 0 ? 2 : 1,
+        amortization,
+        interest,
+        installment,
+        outstandingBalance,
+      };
 
-      parcels.push(parcel);
+      parcels.push(parcel as any);
 
       outstandingBalance -= amortization;
     }
