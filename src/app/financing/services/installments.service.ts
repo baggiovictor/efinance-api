@@ -11,51 +11,97 @@ export class ParcelService {
     private parcelRepository: Repository<ParcelEntity>,
   ) {}
 
-  async createParcels(financing: FinancingEntity): Promise<ParcelEntity[]> {
-    const parcels: ParcelEntity[] = [];
+  private createParcel(
+    financing: FinancingEntity,
+    parcelNumber: number,
+    amortization: number,
+    interest: number,
+    installment: number,
+    outstandingBalance: number,
+  ): Partial<ParcelEntity> {
+    return {
+      financing,
+      parcelNumber,
+      type: parcelNumber % 2 === 0 ? 2 : 1,
+      amortization,
+      interest,
+      installment,
+      outstandingBalance,
+    };
+  }
 
+  async calculateSAC(financing: FinancingEntity): Promise<ParcelEntity[]> {
+    return this.calculateFinancing(
+      financing,
+      (outstandingBalance, annualRate, numberOfTimes, i) => {
+        const amortization = outstandingBalance / numberOfTimes;
+        const interest = (outstandingBalance * annualRate) / 12;
+        const installment = amortization + interest;
+
+        return this.createParcel(
+          financing,
+          i,
+          amortization,
+          interest,
+          installment,
+          outstandingBalance,
+        );
+      },
+    );
+  }
+
+  async calculatePrice(financing: FinancingEntity): Promise<ParcelEntity[]> {
+    return this.calculateFinancing(
+      financing,
+      (outstandingBalance, annualRate, numberOfTimes, i) => {
+        const installment =
+          (financing.amountFinanced * (annualRate / 12)) /
+          (1 - Math.pow(1 + annualRate / 12, -numberOfTimes));
+        const interest = (outstandingBalance * annualRate) / 12;
+        const amortization = installment - interest;
+
+        return this.createParcel(
+          financing,
+          i,
+          amortization,
+          interest,
+          installment,
+          outstandingBalance,
+        );
+      },
+    );
+  }
+
+  private async calculateFinancing(
+    financing: FinancingEntity,
+    calculateParcelFn: (
+      outstandingBalance: number,
+      annualRate: number,
+      numberOfTimes: number,
+      i: number,
+    ) => Partial<ParcelEntity>,
+  ): Promise<ParcelEntity[]> {
+    const parcels: Partial<ParcelEntity>[] = [];
     const financedAmount = financing.amountFinanced;
     const numberOfTimes = financing.amountOfTimes;
-    const annualRate = financing.tax / 100; // Convert rate to decimal
-    const financingType = financing.typeFinanced;
+    const annualRate = financing.tax / 100;
 
     let outstandingBalance = financedAmount;
 
     for (let i = 1; i <= numberOfTimes; i++) {
-      let amortization: number;
-      let interest: number;
-      let installment: number;
-
-      if (financingType === 'SAC') {
-        amortization = outstandingBalance / numberOfTimes;
-        interest = outstandingBalance * (annualRate / 12);
-        installment = amortization + interest;
-      } else if (financingType === 'PRICE') {
-        interest = (outstandingBalance * annualRate) / 12;
-        installment =
-          (financedAmount * (annualRate / 12)) /
-          (1 - Math.pow(1 + annualRate / 12, -numberOfTimes));
-        amortization = installment - interest;
-      }
-
-      const parcel: Partial<ParcelEntity> = {
-        financing,
-        parcelNumber: i,
-        type: i % 2 === 0 ? 2 : 1,
-        amortization,
-        interest,
-        installment,
+      const parcel = calculateParcelFn(
         outstandingBalance,
-      };
-
-      parcels.push(parcel as any);
-
-      outstandingBalance -= amortization;
+        annualRate,
+        numberOfTimes,
+        i,
+      );
+      parcels.push(parcel);
+      outstandingBalance -= parcel.amortization;
     }
 
-    await this.parcelRepository.save(parcels);
+    await this.parcelRepository.save(parcels as ParcelEntity[]);
 
-    return parcels;
+    return parcels as ParcelEntity[];
   }
 
   async findAllByFinancingId(id: any): Promise<ParcelEntity[]> {

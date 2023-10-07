@@ -19,7 +19,9 @@ export class FinancingService {
   ): Promise<Partial<FinancingEntity>> {
     const createdFinancing = await this.financingRepository.save(financing);
 
-    await this.parcelService.createParcels(createdFinancing);
+    financing.typeFinanced === 'SAC'
+      ? await this.parcelService.calculateSAC(createdFinancing)
+      : await this.parcelService.calculatePrice(createdFinancing);
 
     return createdFinancing;
   }
