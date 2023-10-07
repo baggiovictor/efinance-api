@@ -46,5 +46,4 @@ export class FinancingController {
   async getByUserId(@Param('userId') userId: string) {
     return this.financingService.findByUserId(userId);
   }
-
 }
